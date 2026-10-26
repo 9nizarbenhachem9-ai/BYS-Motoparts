@@ -1,0 +1,17 @@
+# Environment variables
+.env
+
+# Binaries and build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+/backend/bin/
+/backend/tmp/
+
+# OS and Editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
