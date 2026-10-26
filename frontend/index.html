@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Web Manajemen Sparepart</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Top Navigation Bar -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="brand-icon">⚙️</div>
+      <div class="brand-title">Manajemen Sparepart</div>
+    </div>
+    <div class="navbar-user">
+      <div class="user-badge" id="currentUserBadge">👤 Admin</div>
+      <button class="btn btn-secondary btn-sm" onclick="logout()">Keluar</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Metrik Ringkasan -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Total Jenis Sparepart</div>
+        <div class="metric-value" id="metricTotalItems">0</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Stok Menipis (Perlu Restock)</div>
+        <div class="metric-value warning-text" id="metricLowStock">0</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Total Unit Tersedia (Halaman ini)</div>
+        <div class="metric-value" id="metricTotalStock">0</div>
+      </div>
+    </div>
+
+    <!-- Toolbar Pencarian & Filter -->
+    <div class="toolbar">
+      <div class="filter-group">
+        <input type="text" id="searchInput" class="form-control search-input" placeholder="🔍 Cari nama, kode, atau merek sparepart...">
+        <select id="filterKategori" class="form-control select-filter">
+          <option value="">Semua Kategori</option>
+          <option value="Mesin">Mesin</option>
+          <option value="Kelistrikan">Kelistrikan</option>
+          <option value="Pengereman">Pengereman</option>
+          <option value="Suspensi">Suspensi</option>
+          <option value="Pelumas/Cairan">Pelumas/Cairan</option>
+          <option value="Bodi & Aksesoris">Bodi & Aksesoris</option>
+        </select>
+      </div>
+      <button id="btnOpenAddModal" class="btn btn-primary">➕ Tambah Sparepart</button>
+    </div>
+
+    <!-- Tabel Data Sparepart -->
+    <div class="table-card">
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Kode</th>
+              <th>Nama Sparepart</th>
+              <th>Kategori</th>
+              <th>Merek</th>
+              <th>Harga Satuan</th>
+              <th>Stok</th>
+              <th>Min</th>
+              <th>Rak</th>
+              <th style="text-align: center;">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="sparepartTableBody">
+            <!-- Data baris dirender dinamis lewat main.js -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Paginasi -->
+      <div class="pagination">
+        <div id="paginationInfo">Memuat data...</div>
+        <div class="pagination-buttons">
+          <button id="btnPrevPage" class="btn btn-secondary btn-sm" disabled>◀ Sebelumnya</button>
+          <button id="btnNextPage" class="btn btn-secondary btn-sm" disabled>Berikutnya ▶</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Context Menu (Klik Kanan pada Baris) -->
+  <div id="customContextMenu" class="context-menu">
+    <div class="context-menu-item" id="ctxTrx">📦 Barang Masuk / Keluar</div>
+    <div class="context-menu-item" id="ctxHistory">📜 Riwayat Transaksi</div>
+    <div class="context-menu-item" id="ctxEdit">✏️ Ubah Data</div>
+    <div class="context-menu-item danger-item" id="ctxDelete">🗑️ Hapus Sparepart</div>
+  </div>
+
+  <!-- Modal 1: Tambah / Ubah Sparepart -->
+  <div id="sparepartModal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="sparepartModalTitle">Tambah Sparepart Baru</h3>
+        <button class="close-btn" onclick="closeModal('sparepartModal')">&times;</button>
+      </div>
+      <form id="sparepartForm">
+        <input type="hidden" id="sparepartId">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="formKode">Kode Sparepart *</label>
+            <input type="text" id="formKode" class="form-control" placeholder="Contoh: BRK-001" required>
+          </div>
+          <div class="form-group">
+            <label for="formNama">Nama Sparepart *</label>
+            <input type="text" id="formNama" class="form-control" placeholder="Contoh: Kampas Rem Depan" required>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label for="formKategori">Kategori</label>
+              <input type="text" id="formKategori" class="form-control" placeholder="Contoh: Pengereman">
+            </div>
+            <div class="form-group">
+              <label for="formMerek">Merek</label>
+              <input type="text" id="formMerek" class="form-control" placeholder="Contoh: Brembo / Honda">
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label for="formHarga">Harga Satuan (Rp)</label>
+              <input type="number" id="formHarga" class="form-control" min="0" value="0" required>
+            </div>
+            <div class="form-group">
+              <label for="formStokMin">Stok Minimum</label>
+              <input type="number" id="formStokMin" class="form-control" min="0" value="5" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="formRak">Lokasi Rak</label>
+            <input type="text" id="formRak" class="form-control" placeholder="Contoh: Rak A-02">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('sparepartModal')">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Data</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: Transaksi Stok (Masuk / Keluar) -->
+  <div id="transactionModal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Pencatatan Stok Barang</h3>
+        <button class="close-btn" onclick="closeModal('transactionModal')">&times;</button>
+      </div>
+      <form id="transactionForm">
+        <div class="modal-body">
+          <div style="background: #f1f5f9; padding: 12px; border-radius: 8px; margin-bottom: 16px; font-weight: 600;" id="trxSparepartInfo">
+            Info Sparepart
+          </div>
+          <div class="form-group">
+            <label for="trxTipe">Tipe Transaksi *</label>
+            <select id="trxTipe" class="form-control" required>
+              <option value="masuk">⬇️ Barang Masuk (Restock / Tambah)</option>
+              <option value="keluar">⬆️ Barang Keluar (Terjual / Dipakai)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="trxJumlah">Jumlah Unit *</label>
+            <input type="number" id="trxJumlah" class="form-control" min="1" value="1" required>
+          </div>
+          <div class="form-group">
+            <label for="trxCatatan">Catatan / No. Nota / Pemasok</label>
+            <input type="text" id="trxCatatan" class="form-control" placeholder="Opsional (misal: Supplier Astra / Nota #902)">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('transactionModal')">Batal</button>
+          <button type="submit" class="btn btn-primary">Proses Transaksi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 3: Riwayat Transaksi -->
+  <div id="historyModal" class="modal-overlay">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-header">
+        <h3 id="historyModalTitle">Riwayat Transaksi</h3>
+        <button class="close-btn" onclick="closeModal('historyModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 0;">
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Waktu</th>
+                <th>Tipe</th>
+                <th>Jumlah</th>
+                <th>Admin</th>
+                <th>Catatan</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody">
+              <!-- Riwayat dimuat dinamis -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('historyModal')">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Konfirmasi Hapus -->
+  <div id="deleteModal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Konfirmasi Hapus</h3>
+        <button class="close-btn" onclick="closeModal('deleteModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="deleteSparepartText" style="color: var(--text-main); font-size: 15px;">Apakah Anda yakin?</p>
+        <p style="color: var(--text-muted); font-size: 13px; margin-top: 8px;">
+          Data akan disembunyikan menggunakan soft-delete sehingga riwayat transaksi tetap terjaga.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('deleteModal')">Batal</button>
+        <button type="button" id="btnConfirmDelete" class="btn btn-danger">Hapus Sekarang</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

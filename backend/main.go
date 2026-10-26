@@ -49,6 +49,14 @@ func main() {
 	router := gin.Default()
 	router.Use(middleware.CORSMiddleware(cfg.AllowedOrigin))
 
+	// Menyajikan berkas Frontend Statis secara langsung
+	router.Static("/css", "../frontend/css")
+	router.Static("/js", "../frontend/js")
+	router.StaticFile("/", "../frontend/index.html")
+	router.StaticFile("/index.html", "../frontend/index.html")
+	router.StaticFile("/login.html", "../frontend/login.html")
+	router.StaticFile("/register.html", "../frontend/register.html")
+
 	// Rute API
 	api := router.Group("/api")
 	{
