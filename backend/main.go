@@ -39,6 +39,9 @@ func main() {
 	authService := services.NewAuthService(db, cfg)
 	authHandler := handlers.NewAuthHandler(authService)
 
+	sparepartService := services.NewSparepartService(db)
+	sparepartHandler := handlers.NewSparepartHandler(sparepartService)
+
 	// 5. Inisialisasi Gin Engine & Middleware
 	router := gin.Default()
 	router.Use(middleware.CORSMiddleware(cfg.AllowedOrigin))
@@ -58,6 +61,16 @@ func main() {
 		protected.Use(middleware.AuthMiddleware(authService))
 		{
 			protected.GET("/auth/me", authHandler.Me)
+
+			// CRUD Sparepart
+			sparepartRoutes := protected.Group("/spareparts")
+			{
+				sparepartRoutes.POST("", sparepartHandler.Create)
+				sparepartRoutes.GET("", sparepartHandler.GetAll)
+				sparepartRoutes.GET("/:id", sparepartHandler.GetByID)
+				sparepartRoutes.PUT("/:id", sparepartHandler.Update)
+				sparepartRoutes.DELETE("/:id", sparepartHandler.Delete)
+			}
 		}
 	}
 
