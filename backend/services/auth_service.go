@@ -169,3 +169,4 @@ func (s *AuthService) GetUserByID(userID uint) (*models.User, error) {
 	}
 	return &user, nil
 }
+

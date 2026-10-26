@@ -43,3 +43,4 @@ func Connect(databaseURL string) (*gorm.DB, error) {
 	DB = db
 	return DB, nil
 }
+

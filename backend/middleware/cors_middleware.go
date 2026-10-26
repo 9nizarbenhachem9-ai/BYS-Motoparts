@@ -30,3 +30,4 @@ func CORSMiddleware(allowedOrigin string) gin.HandlerFunc {
 		c.Next()
 	}
 }
+

@@ -44,3 +44,4 @@ func TestSparepartHandler_ValidationErrors(t *testing.T) {
 		t.Errorf("Diharapkan status 400 Bad Request untuk kode & nama kosong, didapat: %d", w.Code)
 	}
 }
+

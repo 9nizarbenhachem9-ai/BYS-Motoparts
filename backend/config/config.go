@@ -67,3 +67,4 @@ func LoadConfig() (*Config, error) {
 		RegisterInviteCode: registerInviteCode,
 	}, nil
 }
+

@@ -36,3 +36,4 @@ func TestTransactionService_Validation(t *testing.T) {
 		t.Errorf("Diharapkan error 'jumlah transaksi harus lebih besar dari 0', didapat: %v", err)
 	}
 }
+

@@ -80,3 +80,4 @@ func (h *TransactionHandler) GetHistory(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": history})
 }
+

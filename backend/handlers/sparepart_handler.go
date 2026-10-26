@@ -140,3 +140,4 @@ func (h *SparepartHandler) Delete(c *gin.Context) {
 		"message": "Sparepart berhasil dihapus",
 	})
 }
+

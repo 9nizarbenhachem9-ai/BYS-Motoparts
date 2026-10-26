@@ -48,3 +48,4 @@ func TestSparepartService_Validation(t *testing.T) {
 		t.Errorf("Diharapkan error 'stok minimum tidak boleh negatif', didapat: %v", err)
 	}
 }
+

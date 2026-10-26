@@ -212,3 +212,4 @@ func (s *SparepartService) Delete(id uint) error {
 
 	return nil
 }
+

@@ -55,3 +55,4 @@ func TestLoadConfig_Success(t *testing.T) {
 		t.Errorf("AllowedOrigin default harus http://localhost:5500, didapat: %s", cfg.AllowedOrigin)
 	}
 }
+

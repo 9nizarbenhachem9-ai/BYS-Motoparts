@@ -16,3 +16,4 @@ type StockTransaction struct {
 	User        User      `gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:RESTRICT;" json:"user,omitempty"`
 	CreatedAt   time.Time `json:"created_at"`
 }
+

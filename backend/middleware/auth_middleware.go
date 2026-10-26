@@ -38,3 +38,4 @@ func AuthMiddleware(authService *services.AuthService) gin.HandlerFunc {
 		c.Next()
 	}
 }
+
