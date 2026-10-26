@@ -42,6 +42,9 @@ func main() {
 	sparepartService := services.NewSparepartService(db)
 	sparepartHandler := handlers.NewSparepartHandler(sparepartService)
 
+	transactionService := services.NewTransactionService(db)
+	transactionHandler := handlers.NewTransactionHandler(transactionService)
+
 	// 5. Inisialisasi Gin Engine & Middleware
 	router := gin.Default()
 	router.Use(middleware.CORSMiddleware(cfg.AllowedOrigin))
@@ -70,6 +73,10 @@ func main() {
 				sparepartRoutes.GET("/:id", sparepartHandler.GetByID)
 				sparepartRoutes.PUT("/:id", sparepartHandler.Update)
 				sparepartRoutes.DELETE("/:id", sparepartHandler.Delete)
+
+				// Transaksi Stok Sparepart (Barang Masuk / Keluar & Riwayat)
+				sparepartRoutes.POST("/:id/transactions", transactionHandler.Record)
+				sparepartRoutes.GET("/:id/transactions", transactionHandler.GetHistory)
 			}
 		}
 	}
