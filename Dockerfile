@@ -33,3 +33,4 @@ EXPOSE 8080
 
 # Eksekusi aplikasi
 CMD ["/app/server"]
+
