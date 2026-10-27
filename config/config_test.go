@@ -10,6 +10,7 @@ import (
 
 func TestLoadConfig_MissingDatabaseURL(t *testing.T) {
 	os.Clearenv()
+	os.Setenv("SKIP_ENV_LOAD", "1")
 
 	_, err := config.LoadConfig()
 	if err == nil {
@@ -23,6 +24,7 @@ func TestLoadConfig_MissingDatabaseURL(t *testing.T) {
 
 func TestLoadConfig_MissingJWTSecret(t *testing.T) {
 	os.Clearenv()
+	os.Setenv("SKIP_ENV_LOAD", "1")
 	os.Setenv("DATABASE_URL", "postgres://user:pass@localhost:5432/testdb")
 
 	_, err := config.LoadConfig()
@@ -37,6 +39,7 @@ func TestLoadConfig_MissingJWTSecret(t *testing.T) {
 
 func TestLoadConfig_Success(t *testing.T) {
 	os.Clearenv()
+	os.Setenv("SKIP_ENV_LOAD", "1")
 	os.Setenv("DATABASE_URL", "postgres://user:pass@localhost:5432/testdb")
 	os.Setenv("JWT_SECRET", "supersecret123")
 

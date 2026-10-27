@@ -23,8 +23,10 @@ type Config struct {
 // Jika variabel wajib tidak ada, fungsi mengembalikan error dengan menyebut nama variabel yang hilang.
 func LoadConfig() (*Config, error) {
 	// Coba muat file .env dari folder saat ini atau folder root proyek
-	_ = godotenv.Load(".env")
-	_ = godotenv.Load("../.env")
+	if os.Getenv("SKIP_ENV_LOAD") != "1" {
+		_ = godotenv.Load(".env")
+		_ = godotenv.Load("../.env")
+	}
 
 	appPort := os.Getenv("APP_PORT")
 	if appPort == "" {
