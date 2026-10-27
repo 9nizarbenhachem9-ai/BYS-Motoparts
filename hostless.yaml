@@ -1,0 +1,5 @@
+# Hostless Cloud Configuration
+build:
+  system: docker
+  dockerfile_path: "./Dockerfile"
+start_command: "/app/server"

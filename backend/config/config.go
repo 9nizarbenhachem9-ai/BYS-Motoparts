@@ -28,6 +28,9 @@ func LoadConfig() (*Config, error) {
 
 	appPort := os.Getenv("APP_PORT")
 	if appPort == "" {
+		appPort = os.Getenv("PORT") // Mendukung environment PaaS (Hostless, Railway, Render, dll)
+	}
+	if appPort == "" {
 		appPort = "8080"
 	}
 

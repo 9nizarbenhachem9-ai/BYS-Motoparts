@@ -2,6 +2,8 @@ package main
 
 import (
 	"log"
+	"os"
+	"path/filepath"
 
 	"sparepart-backend/config"
 	"sparepart-backend/database"
@@ -49,13 +51,19 @@ func main() {
 	router := gin.Default()
 	router.Use(middleware.CORSMiddleware(cfg.AllowedOrigin))
 
+	// Deteksi lokasi folder frontend (bekerja baik saat dijalankan dari folder backend, root repo, maupun Docker)
+	frontendDir := "./frontend"
+	if _, err := os.Stat(frontendDir); os.IsNotExist(err) {
+		frontendDir = "../frontend"
+	}
+
 	// Menyajikan berkas Frontend Statis secara langsung
-	router.Static("/css", "../frontend/css")
-	router.Static("/js", "../frontend/js")
-	router.StaticFile("/", "../frontend/index.html")
-	router.StaticFile("/index.html", "../frontend/index.html")
-	router.StaticFile("/login.html", "../frontend/login.html")
-	router.StaticFile("/register.html", "../frontend/register.html")
+	router.Static("/css", filepath.Join(frontendDir, "css"))
+	router.Static("/js", filepath.Join(frontendDir, "js"))
+	router.StaticFile("/", filepath.Join(frontendDir, "index.html"))
+	router.StaticFile("/index.html", filepath.Join(frontendDir, "index.html"))
+	router.StaticFile("/login.html", filepath.Join(frontendDir, "login.html"))
+	router.StaticFile("/register.html", filepath.Join(frontendDir, "register.html"))
 
 	// Rute API
 	api := router.Group("/api")
