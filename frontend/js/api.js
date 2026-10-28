@@ -1,12 +1,13 @@
 // Konfigurasi URL dasar API
-const API_BASE = (window.location.port === "8080")
-  ? "/api"
-  : "http://localhost:8080/api";
+// Selalu memakai path relatif /api:
+// - Mode development (Vite): /api di-proxy ke backend Go (lihat vite.config.js)
+// - Mode produksi: disajikan langsung oleh backend Go di origin yang sama
+export const API_BASE = "/api";
 
 /**
  * Wrapper serbaguna untuk panggilan fetch() ke backend API
  */
-async function apiRequest(endpoint, options = {}) {
+export async function apiRequest(endpoint, options = {}) {
   const token = localStorage.getItem("token");
 
   const headers = {
@@ -54,7 +55,7 @@ async function apiRequest(endpoint, options = {}) {
 /**
  * Menampilkan pesan toast melayang (notifikasi halus tanpa popup alert)
  */
-function showToast(message, type = "success") {
+export function showToast(message, type = "success") {
   let container = document.getElementById("toastContainer");
   if (!container) {
     container = document.createElement("div");
@@ -79,4 +80,3 @@ function showToast(message, type = "success") {
     }, 300);
   }, 3500);
 }
-

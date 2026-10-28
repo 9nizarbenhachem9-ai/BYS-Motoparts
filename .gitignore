@@ -1,6 +1,10 @@
 # Environment variables
 .env
 
+# Node.js / frontend build artifacts
+frontend/node_modules/
+frontend/dist/
+
 # Binaries and build artifacts
 *.exe
 *.exe~

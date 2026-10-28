@@ -3,4 +3,6 @@
 .env
 *.exe
 backend/*.exe
+frontend/node_modules
+frontend/dist
 

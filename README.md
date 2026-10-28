@@ -35,6 +35,7 @@ Aplikasi web modern untuk manajemen inventaris sparepart bengkel dan gudang, dib
 
 ### 1. Prasyarat
 - **Go** (versi 1.20+)
+- **Node.js** 18+ dan **npm** (untuk tooling frontend/Vite)
 - **PostgreSQL** aktif
 
 ### 2. Konfigurasi Variabel Lingkungan
@@ -52,15 +53,36 @@ ALLOWED_ORIGIN=http://localhost:5500
 ```
 
 ### 3. Menjalankan Backend & Frontend
-Buka terminal di direktori `backend`:
+
+Frontend ditulis dengan **HTML/CSS/JavaScript murni** lalu dikelola oleh **npm + Vite** (dev server, proxy API, dan bundling untuk produksi).
+
+**Mode development — buka dua terminal:**
+
+Terminal 1 (backend Go):
 ```powershell
-cd backend
 go run .
 ```
 
-Aplikasi backend akan langsung berjalan dan menyajikan frontend secara otomatis:
-- **Buka Browser:** Kunjungi [http://localhost:8080](http://localhost:8080)
-- Masuk ke menu **Daftar di sini** untuk membuat akun admin pertama Anda, lalu login untuk masuk ke dashboard utama.
+Terminal 2 (frontend Vite):
+```powershell
+cd frontend
+npm install   # cukup sekali di awal
+npm run dev
+```
+
+- Buka **http://localhost:5173** — semua panggilan `/api` otomatis di-proxy ke backend Go (port 8080), jadi tanpa masalah CORS.
+- Alternatif tanpa Vite: buka [http://localhost:8080](http://localhost:8080) — backend menyajikan sumber frontend mentah (tanpa bundling/minify).
+
+**Mode produksi — build frontend lalu jalankan backend:**
+```powershell
+cd frontend
+npm run build    # menghasilkan frontend/dist/
+cd ..
+go run .         # backend menyajikan isi frontend/dist
+```
+Buka [http://localhost:8080](http://localhost:8080).
+
+> Deploy ke Hostless tidak perlu langkah tambahan: Dockerfile otomatis menjalankan `npm ci` + `npm run build` pada tahap `frontend-builder`, lalu menyalin hasilnya ke `/app/frontend/` yang disajikan biner Go.
 
 ---
 

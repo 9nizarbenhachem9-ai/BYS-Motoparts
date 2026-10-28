@@ -15,7 +15,7 @@
     </div>
     <div class="navbar-user">
       <div class="user-badge" id="currentUserBadge">👤 Admin</div>
-      <button class="btn btn-secondary btn-sm" onclick="logout()">Keluar</button>
+      <button class="btn btn-secondary btn-sm" id="btnLogout">Keluar</button>
     </div>
   </nav>
 
@@ -100,7 +100,7 @@
     <div class="modal-dialog">
       <div class="modal-header">
         <h3 id="sparepartModalTitle">Tambah Sparepart Baru</h3>
-        <button class="close-btn" onclick="closeModal('sparepartModal')">&times;</button>
+        <button class="close-btn" data-close="sparepartModal">&times;</button>
       </div>
       <form id="sparepartForm">
         <input type="hidden" id="sparepartId">
@@ -139,7 +139,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" onclick="closeModal('sparepartModal')">Batal</button>
+          <button type="button" class="btn btn-secondary" data-close="sparepartModal">Batal</button>
           <button type="submit" class="btn btn-primary">Simpan Data</button>
         </div>
       </form>
@@ -151,7 +151,7 @@
     <div class="modal-dialog">
       <div class="modal-header">
         <h3>Pencatatan Stok Barang</h3>
-        <button class="close-btn" onclick="closeModal('transactionModal')">&times;</button>
+        <button class="close-btn" data-close="transactionModal">&times;</button>
       </div>
       <form id="transactionForm">
         <div class="modal-body">
@@ -175,7 +175,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" onclick="closeModal('transactionModal')">Batal</button>
+          <button type="button" class="btn btn-secondary" data-close="transactionModal">Batal</button>
           <button type="submit" class="btn btn-primary">Proses Transaksi</button>
         </div>
       </form>
@@ -187,7 +187,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-header">
         <h3 id="historyModalTitle">Riwayat Transaksi</h3>
-        <button class="close-btn" onclick="closeModal('historyModal')">&times;</button>
+        <button class="close-btn" data-close="historyModal">&times;</button>
       </div>
       <div class="modal-body" style="padding: 0;">
         <div class="table-responsive">
@@ -208,7 +208,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" onclick="closeModal('historyModal')">Tutup</button>
+        <button type="button" class="btn btn-secondary" data-close="historyModal">Tutup</button>
       </div>
     </div>
   </div>
@@ -218,7 +218,7 @@
     <div class="modal-dialog">
       <div class="modal-header">
         <h3>Konfirmasi Hapus</h3>
-        <button class="close-btn" onclick="closeModal('deleteModal')">&times;</button>
+        <button class="close-btn" data-close="deleteModal">&times;</button>
       </div>
       <div class="modal-body">
         <p id="deleteSparepartText" style="color: var(--text-main); font-size: 15px;">Apakah Anda yakin?</p>
@@ -227,15 +227,13 @@
         </p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" onclick="closeModal('deleteModal')">Batal</button>
+        <button type="button" class="btn btn-secondary" data-close="deleteModal">Batal</button>
         <button type="button" id="btnConfirmDelete" class="btn btn-danger">Hapus Sekarang</button>
       </div>
     </div>
   </div>
 
-  <script src="js/api.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/main.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
 

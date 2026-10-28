@@ -58,12 +58,19 @@ func main() {
 	}
 
 	// Menyajikan berkas Frontend Statis secara langsung
-	router.Static("/css", filepath.Join(frontendDir, "css"))
-	router.Static("/js", filepath.Join(frontendDir, "js"))
-	router.StaticFile("/", filepath.Join(frontendDir, "index.html"))
-	router.StaticFile("/index.html", filepath.Join(frontendDir, "index.html"))
-	router.StaticFile("/login.html", filepath.Join(frontendDir, "login.html"))
-	router.StaticFile("/register.html", filepath.Join(frontendDir, "register.html"))
+	// Jika ada folder dist hasil build Vite (npm run build / Docker), pakai isi dist;
+	// jika belum ada, sajikan sumber mentah frontend/ (mode development tanpa build).
+	publicDir := filepath.Join(frontendDir, "dist")
+	if _, err := os.Stat(publicDir); os.IsNotExist(err) {
+		publicDir = frontendDir
+	}
+	router.Static("/assets", filepath.Join(publicDir, "assets"))
+	router.Static("/css", filepath.Join(publicDir, "css"))
+	router.Static("/js", filepath.Join(publicDir, "js"))
+	router.StaticFile("/", filepath.Join(publicDir, "index.html"))
+	router.StaticFile("/index.html", filepath.Join(publicDir, "index.html"))
+	router.StaticFile("/login.html", filepath.Join(publicDir, "login.html"))
+	router.StaticFile("/register.html", filepath.Join(publicDir, "register.html"))
 
 	// Rute API
 	api := router.Group("/api")

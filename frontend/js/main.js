@@ -1,3 +1,7 @@
+// Impor modul (di-bundle oleh Vite)
+import { apiRequest, showToast } from "./api.js";
+import { checkAuth, logout } from "./auth.js";
+
 // State aplikasi
 let state = {
   items: [],
@@ -442,6 +446,14 @@ function escapeHtml(str) {
 
 // Inisialisasi Event Handlers
 document.addEventListener("DOMContentLoaded", async () => {
+  // Tombol logout di navbar (pengganti onclick inline)
+  document.getElementById("btnLogout").addEventListener("click", logout);
+
+  // Tombol tutup/batal pada semua modal (pengganti onclick inline)
+  document.querySelectorAll("[data-close]").forEach((btn) => {
+    btn.addEventListener("click", () => closeModal(btn.dataset.close));
+  });
+
   const user = await checkAuth(true);
   if (!user) return;
 
